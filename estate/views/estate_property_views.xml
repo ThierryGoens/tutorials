@@ -19,6 +19,7 @@
                 <field name="expected_price"/>
                 <field name="selling_price"/>
                 <field name="date_availability"/>
+                <field name="property_type_id" string="Property Type"/>
             </tree>
         </field>
 
@@ -57,10 +58,13 @@
                         <h1 class="mb32">
                             <field name="name" class="mb16"/>
                         </h1>
+                        <field name="tag_ids" widget="many2many_tags"/>
                         <field name="active" invisible="1"/>
                     </div>
                     <group>
                         <group>
+                            
+                            <field name="property_type_id" />
                             <field name="postcode" />
                             <field name="date_availability" />
                         </group>
@@ -80,8 +84,18 @@
                                     <field name="facades"/>
                                     <field name="garage"/>
                                     <field name="garden"/>
-                                    <field name="garden_area"/>
+                                    <field name="garden_area" string="Garden Area (sqm)"/>
                                     <field name="garden_orientation"/>
+                                </group>
+                                <group>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Other Info">
+                            <group>
+                                <group>
+                                    <field name="buyer_id"/>
+                                    <field name="user_id"/>
                                 </group>
                                 <group>
                                 </group>

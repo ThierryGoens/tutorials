@@ -83,7 +83,10 @@ class EstateProperty(models.Model):
     @api.depends("offer_ids")
     def _compute_best_offer(self):
         for record in self:
-            record.best_offer = max(record.offer_ids.mapped("price"))
+            if record.offer_ids:
+                record.best_offer = max(record.offer_ids.mapped("price"))
+            else:
+                record.best_offer = 0
             
     @api.onchange("garden")
     def _onchange_garden(self):
@@ -93,6 +96,16 @@ class EstateProperty(models.Model):
         else:
             self.garden_orientation = ""
             self.garden_area = 0
+            
+    @api.constrains('selling_price', 'expected_price')
+    def _check_selling_price(self):
+        for record in self:
+            if fields.Float.is_zero(self.selling_price, precision_rounding=0.01):
+                return True
+            else:
+                if fields.Float.compare(self.selling_price, self.expected_price*0.9, precision_rounding=0.01) < 0:
+                    raise exceptions.ValidationError('The selling price should not be lower than 90 percent of the expected price')
+                    
 
     def action_set_sold(self):
         for record in self:

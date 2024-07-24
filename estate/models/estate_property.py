@@ -6,11 +6,21 @@ class EstatePropertyTag(models.Model):
     
     name = fields.Char(required=True)
     
+    _sql_constraints = [
+        ('check_name', 'UNIQUE(name)',
+         'The tag name should be unique.'),
+    ]
+    
 class EstatePropertyType(models.Model):
     _name = "estate.property.type"
     _description = "Regroup the different type of property"
     
     name = fields.Char(required=True)
+    
+    _sql_constraints = [
+        ('check_name', 'UNIQUE(name)',
+         'The type name should be unique.'),
+    ]
 
 class EstateProperty(models.Model):
     _name = "estate.property"
@@ -57,6 +67,13 @@ class EstateProperty(models.Model):
     offer_ids = fields.One2many("estate.property.offer", "property_id")
     total_area = fields.Integer(compute="_compute_total_area")
     best_offer = fields.Float(compute="_compute_best_offer")
+    
+    _sql_constraints = [
+        ('check_expected_price', 'CHECK(expected_price >= 0)',
+         'The expected price should never be negative.'),
+        ('check_selling_price', 'CHECK(selling_price >= 0)',
+         'The selling price should never be negative.'),
+    ]
     
     @api.depends("living_area", "garden_area")
     def _compute_total_area(self):

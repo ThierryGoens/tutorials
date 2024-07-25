@@ -3,6 +3,7 @@ from odoo import fields, models, api, exceptions
 class EstatePropertyOffer(models.Model):
     _name = "estate.property.offer"
     _description = "this is an accurate description"
+    _order = 'price desc'
     
     price = fields.Float()
     status = fields.Selection(copy=False, 
@@ -33,14 +34,18 @@ class EstatePropertyOffer(models.Model):
             record.validity = (record.date_deadline - record.create_date).days
             
     def action_accept_offer(self):
-        if self.property_id.selling_price:
+        if self.property_id.state == "offer_accepted":
             raise exceptions.UserError("This property has already a selling offer accepted")
         else:
             self.property_id.selling_price = self.price
             self.property_id.buyer_id = self.partner_id
             self.status = "accepted"
+            self.property_id.state = "offer_accepted"
         return True
 
     def action_refuse_offer(self):
+        if self.status == "accepted":
+            self.property_id.selling_price = 0
+        self.property_id.state = 'offer_received'
         self.status = "refused"
         return True

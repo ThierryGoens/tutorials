@@ -50,21 +50,22 @@
         <field name="arch" type="xml">    
             <form string="Properties">
                 <header>
-                    <button name="action_set_sold" type="object" string="SOLD"/>
+                    <button name="action_set_sold" type="object" string="SOLD" invisible="state == 'offer_accepted'"/>
+                    <button name="action_set_sold" type="object" string="SOLD" class = 'btn-primary' invisible="state != 'offer_accepted'"/>
                     <button name="action_set_canceled" type="object" string="CANCELED"/>
+                    <field name="state" widget='statusbar'/>
                 </header>
                 <sheet>
                     <div class="oe_title">
                         <h1>
                             <field name="name"  />
                         </h1>
-                        <field name="tag_ids" widget="many2many_tags" class="mb32"/>
+                        <field name="tag_ids" widget="many2many_tags" class="mb32" />
                         <field name="active" invisible="1"/>
                     </div>
                     <group>
                         <group>
-                            <field name="state" />
-                            <field name="property_type_id" />
+                            <field name="property_type_id" options="{'create':False}"/>
                             <field name="postcode" />
                             <field name="date_availability" />
                         </group>

@@ -3,8 +3,10 @@ from odoo import fields, models, api, exceptions
 class EstatePropertyTag(models.Model):
     _name = "estate.property.tag"
     _description = "this is an accurate description"
+    _order = 'name'
     
     name = fields.Char(required=True)
+    color = fields.Integer()
     
     _sql_constraints = [
         ('check_name', 'UNIQUE(name)',
@@ -14,8 +16,11 @@ class EstatePropertyTag(models.Model):
 class EstatePropertyType(models.Model):
     _name = "estate.property.type"
     _description = "Regroup the different type of property"
+    _order = 'sequence, name'
     
     name = fields.Char(required=True)
+    property_ids = fields.One2many('estate.property', "property_type_id")
+    sequence = fields.Integer('Sequence', default=1, help="Used to order types. Lower is better.")
     
     _sql_constraints = [
         ('check_name', 'UNIQUE(name)',
@@ -25,6 +30,7 @@ class EstatePropertyType(models.Model):
 class EstateProperty(models.Model):
     _name = "estate.property"
     _description = "This is a description that explains what it does."
+    _order = "id desc"
 
     name = fields.Char(required=True)
     description = fields.Text()
@@ -106,7 +112,6 @@ class EstateProperty(models.Model):
                 if fields.Float.compare(self.selling_price, self.expected_price*0.9, precision_rounding=0.01) < 0:
                     raise exceptions.ValidationError('The selling price should not be lower than 90 percent of the expected price')
                     
-
     def action_set_sold(self):
         for record in self:
             if record.state == "canceled":
@@ -122,5 +127,3 @@ class EstateProperty(models.Model):
             else:
                 record.state = "canceled"
         return True
-    
-    

@@ -60,7 +60,7 @@
                         <h1>
                             <field name="name"  />
                         </h1>
-                        <field name="tag_ids" widget="many2many_tags" class="mb32" />
+                        <field name="tag_ids" widget="many2many_tags" class="mb32" options="{'color_field': 'color'}"/>
                         <field name="active" invisible="1"/>
                     </div>
                     <group>
@@ -85,8 +85,8 @@
                                     <field name="facades"/>
                                     <field name="garage"/>
                                     <field name="garden"/>
-                                    <field name="garden_area" string="Garden Area (sqm)"/>
-                                    <field name="garden_orientation"/>
+                                    <field name="garden_area" string="Garden Area (sqm)" invisible="not garden"/>
+                                    <field name="garden_orientation" invisible="not garden"/>
                                     <field name="total_area" string="Total area (sqm)"/>
                                 </group>
                                 <group>
@@ -94,7 +94,7 @@
                             </group>
                         </page>
                         <page string="Offers">
-                            <field name="offer_ids"/>
+                            <field name="offer_ids" readonly="state in ['offer_accepted', 'sold', 'canceled']"/>
                         </page>
                         <page string="Other Info">
                             <group>

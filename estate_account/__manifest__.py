@@ -1,12 +1,9 @@
-
 {
-    'name': 'Estate Account',
-    'depends': [
-        'base',
-        'estate',
-        'account',
+    "name": "Estate Account",
+    "depends": [
+        "base",
+        "estate",
+        "account",
     ],
-    'data': [
- 
-    ],
+    "data": [],
 }
